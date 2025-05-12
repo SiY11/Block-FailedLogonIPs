@@ -9,3 +9,6 @@
 - Updated Task Scheduler action to use `C:\BlockIPScript\script\Block-FailedLogonIPs.ps1`.
 - Added GitHub Actions workflow for PowerShell linting with PSScriptAnalyzer.
 - Updated `README.md` and `.gitignore` to reflect new structure.
+
+## [1.1.1] - 2025-05-12
+- Small tweak to the script comments to reflect proper folder structures
