@@ -1,0 +1,14 @@
+# PowerShell-specific exclusions
+*.ps1xml
+*.psc1
+*.psd1
+*.psm1
+
+# Log and limits files
+Logs/*
+*.log
+*.json
+*.zip
+
+# Game server-specific exclusions
+script/*.log

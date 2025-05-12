@@ -1,0 +1,11 @@
+name: Lint PowerShell
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install PSScriptAnalyzer
+      run: Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+    - name: Run PSScriptAnalyzer
+      run: Invoke-ScriptAnalyzer -Path script/*.ps1 -Recurse -Severity Error
