@@ -5,16 +5,16 @@
              Checks for existing Windows firewall rules before querying IP geolocation API, using 
              batch queries for 2+ IPs (15 req/min) and single queries for 1 IP (45 req/min). 
              Manages separate rate limits via limits file and response headers (X-Rl, X-Ttl). 
-             Logs new blocks, existing rules, and errors to C:\Logs\BlockIP.log.
+             Logs new blocks, existing rules, and errors to C:\BlockIPScript\Logs\BlockIP.log.
     Author: Nicholas Carter (SiY11@hotmail.com)
     Date: May 2025
     Notes:
     - Runs via Task Scheduler when event ID 4625 triggers, you need to create this task with admin rights.
     - I suggest creating a local service account with admin rights to be used for running this task.
-    - Appends to a single log file C:\Logs\BlockIP.log.
+    - Appends to a single log file C:\BlockIPScript\Logs\BlockIP.log.
     - Logs only new firewall rules, existing rules, or errors.
     - Uses ip-api.com for IP geolocation (free, 45 req/min for single, 15 req/min for batch).
-    - Tracks rate limits in C:\Logs\IPAPILimits.json.
+    - Tracks rate limits in C:\BlockIPScript\Logs\IPAPILimits.json.
 #>
 
 # ----- Parameters for Dynamic Thresholds -----
@@ -37,7 +37,7 @@ $LimitsFile = Join-Path $LogDir "IPAPILimits.json"
 $MaxLogSizeMB = 10  # Maximum size of BlockIP.log in MB
 $LogRetentionDays = 365  # Days to retain archived logs (if not unlimited)
 $LogRetentionUnlimited = $true  # Set to $true to keep archives indefinitely
-$LimitsBackupRetentionDays = 7  # Days to retain limits file backups
+$LimitsBackupRetentionDays = 1  # Days to retain limits file backups
 
 # Ensure log directory exists
 if (-not (Test-Path $LogDir)) {
