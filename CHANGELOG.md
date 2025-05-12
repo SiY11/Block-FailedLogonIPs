@@ -2,3 +2,10 @@
 ## [1.0.0] - 2025-05-12
 - Initial release: IP blocking for Event ID 4625 with ip-api.com geolocation.
 - Added configurable thresholds, log rotation, and dynamic thresholds.
+
+## [1.1.0] - 2025-05-12
+- Restructured to self-contained folder layout: `C:\BlockIPScript` with `script/` and `Logs/` subfolders.
+- Updated log paths to `C:\BlockIPScript\Logs` for `BlockIP.log`, `IPAPILimits.json`, and archives/backups.
+- Updated Task Scheduler action to use `C:\BlockIPScript\script\Block-FailedLogonIPs.ps1`.
+- Added GitHub Actions workflow for PowerShell linting with PSScriptAnalyzer.
+- Updated `README.md` and `.gitignore` to reflect new structure.
