@@ -1,30 +1,25 @@
 # Block-FailedLogonIPs
 
-PowerShell script to monitor Event ID 4625 (failed logon attempts) on a Windows server or client, auto-blocking non-US IPs on the first attempt and US IPs with more than a configurable number of attempts (default: 5) in a configurable time window (default: 10 minutes). Uses ip-api.com for geolocation with batch queries for efficiency.
+PowerShell script to monitor Event ID 4625 (failed logon attempts) on a Windows server or client, such as a game server. It auto-blocks non-US IPs on the first attempt and US IPs with more than a configurable number of attempts (default: 5) in a configurable time window (default: 10 minutes). Uses ip-api.com for geolocation with batch queries for efficiency.
 
 ## Features
 - Auto-blocks non-US IPs on first attempt, US IPs with >5 attempts in 10 minutes.
 - Checks existing firewall rules before API calls to minimize requests.
 - Uses ip-api.com (45 req/min for single queries, 15 req/min for batch queries).
-- Logs new rules, existing rules, and errors to `C:\BlockIPScript\Logs\BlockIP.log`.
+- Logs new rules, existing rules, and errors to a ``Logs`` folder relative to the script's location (e.g., ``C:\BlockIPScript\Logs\BlockIP.log``).
 - Configurable thresholds for attempts and time window, with dynamic parameters for manual runs.
 - Log rotation (10 MB max) with unlimited retention (enabled).
-- Rate limit tracking in `C:\BlockIPScript\Logs\IPAPILimits.json` with daily backups.
+- Rate limit tracking in a ``Logs`` folder (e.g., ``C:\BlockIPScript\Logs\IPAPILimits.json``) with daily backups.
+- Supports an IP whitelist via ``allowed_ips.txt`` to exempt specific IPs from blocking.
 
 ## Prerequisites
 - Windows 10 Pro or Server with PowerShell 5.1.
 - Administrative privileges for creating Windows Firewall rules.
-- Write access to `C:\BlockIPScript\Logs` for logs and rate limit tracking.
+- Write access to the ``Logs`` folder in the script’s parent directory (e.g., ``C:\BlockIPScript\Logs``).
 - Internet access for ip-api.com API calls.
-- Git for version control (optional for local use).
 
 ## Installation
-- Clone the repository:
-    ```bash
-    git clone https://github.com/your-username/Block-FailedLogonIPs.git
-    cd Block-FailedLogonIPs
-    ```
-- Copy Block-FailedLogonIPs.ps1 to C:\BlockIPScript\script.
+- Copy file structure to a local folder of your choice.
 
 ## Usage
 ### Manual Run
@@ -49,13 +44,16 @@ PowerShell script to monitor Event ID 4625 (failed logon attempts) on a Windows 
 - ``$LogRetentionUnlimited``: Set to true for unlimited log retention (currently enabled).
 - ``$LogRetentionDays``: Days to keep archived logs if not unlimited (default: 365).
 - ``$MaxLogSizeMB``: Max log size before rotation (default: 10 MB).
-- ``$LimitsBackupRetentionDays``: Days to keep limits file backups (default: 7).
+- ``$LimitsBackupRetentionDays``: Days to keep limits file backups (default: 1).
+
+## Whitelist
+- Add IP's to the ``allowed_ips.txt`` file to exempt specific IPs from blocking. List one IPv4 address per line:
 
 ## Logs
-- **Event Logs**: ``C:\BlockIPScript\Logs\BlockIP.log`` (new rules, existing rules, errors).
-- **Rate Limits**: ``C:\BlockIPScript\Logs\IPAPILimits.json`` (API call limits).
-- **Archives**: ``C:\BlockIPScript\Logs\BlockIP_YYYYMMDD.log.zip`` (rotated logs, unlimited retention).
-- **Backups**: ``C:\BlockIPScript\Logs\IPAPILimits_YYYYMMDD.json`` (7-day retention).
+- **Event Logs**: ``\BlockIPScript\Logs\BlockIP.log`` (new rules, existing rules, errors).
+- **Rate Limits**: ``\BlockIPScript\Logs\IPAPILimits.json`` (API call limits).
+- **Archives**: ``\BlockIPScript\Logs\BlockIP_YYYYMMDD.log.zip`` (rotated logs, unlimited retention).
+- **Backups**: ``\BlockIPScript\Logs\IPAPILimits_YYYYMMDD.json`` (1-day retention).
 
 ##### Example Log Output
 

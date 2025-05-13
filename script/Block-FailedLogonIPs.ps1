@@ -29,7 +29,12 @@ param (
 # ----- Configuration -----
 #region Configuration
 # Define log and limits file paths
-$LogDir = "C:\BlockIPScript\Logs"
+$ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path  # Fallback for older PowerShell versions
+if ($PSCommandPath) { $ScriptRoot = Split-Path -Parent $PSCommandPath }  # Use PSCommandPath if available
+$LogDir = Join-Path (Split-Path -Parent $ScriptRoot) "Logs"  # e.g., C:\BlockIPScript\Logs
+if (-not (Test-Path -Path $LogDir)) {
+    New-Item -Path $LogDir -ItemType Directory -Force | Out-Null
+}
 $LogFile = Join-Path $LogDir "BlockIP.log"
 $LimitsFile = Join-Path $LogDir "IPAPILimits.json"
 
@@ -371,7 +376,14 @@ foreach ($IP in $IPsToQuery) {
     try {
         $CountryCode, $Country = $CountryData[$IP]
         if (-not $CountryCode) { continue }  # Skip if country couldn't be determined
-
+		
+		$WhitelistPath = Join-Path (Split-Path -Parent $ScriptRoot) "allowed_ips.txt"
+		$Whitelist = if (Test-Path $WhitelistPath) { Get-Content -Path $WhitelistPath | Where-Object { $_ -match '^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$' } } else { @() }
+		if ($Whitelist -contains $IP) {
+			Write-Log -Level "INFO" -Message "IP $IP is in allowed_ips.txt, skipping block."
+			continue
+		}
+		
         # Determine if IP should be blocked
         $ShouldBlock = $false
         $Reason = ""

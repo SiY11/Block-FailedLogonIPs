@@ -12,3 +12,7 @@
 
 ## [1.1.1] - 2025-05-12
 - Small tweak to the script comments to reflect proper folder structures
+
+## [1.2.0] - 2025-05-12
+- Made script location-agnostic, allowing `BlockIPScript` folder to be placed anywhere with dynamic log paths (e.g., `<ScriptRoot>\Logs`).
+- Added IP whitelist support via `allowed_ips.txt` to exempt specific IPs from blocking, with exemptions logged.
